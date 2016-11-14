@@ -1,0 +1,25 @@
+{
+    "$schemas": "http://json-schema.org/draft-03/schema",
+    "type": "array",
+    "feedback": {
+        "type": "object",
+        "properties": {
+            "elementid": {
+                "type": "string",
+                "required": true
+            },
+            "eventid": {
+                "type": "string",
+                "required": true
+            },
+            "metricid": {
+                "type": "string",
+                "required": true
+            },
+            "feedbackval": {
+                "type": "string",
+                "required": true
+            }
+        }
+    }
+}

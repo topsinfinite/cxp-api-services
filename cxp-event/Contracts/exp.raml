@@ -1,0 +1,89 @@
+#%RAML 0.8
+---
+title: API for providing configuration settings and also event feedback informaiton for CxP Event Application
+version: v0.1
+
+baseUri: http://localhost/exp-api
+
+mediaType: application/json
+
+schemas: 
+ - event: !include C:\\Projects\\CxP\\API\\cxp-event\\Contracts\\includes\\cxp-event.schemas
+ - feedback: !include C:\\Projects\\CxP\\API\\cxp-event\\Contracts\\includes\\cxp-event-feedback.schemas
+
+resourceTypes:
+  - collection-item:
+      description: Entity representing a <<resourcePathName|!singularize>>
+      get:
+        description: |
+          Get the <<resourcePathName|!singularize>>
+          with <<resourcePathName|!singularize>>Id =
+          {<<resourcePathName|!singularize>>Id}
+        headers:
+          X-DeviceId:
+            description: This is the device id
+            required: true
+            example: 355357055544162
+          X-EventId:
+            description: This is the event id
+            required: true
+            example: 2
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  <<exampleItem>>
+          404:
+            body:
+              application/json:
+                example: |
+                  {"message": "<<resourcePathName|!singularize>> not found" }
+  - collection:
+      description: Entity representing a feedback
+      post:
+        description: |
+          Add a new <<resourcePathName|!singularize>> to CxP Event Feed Back. Body is a collection of feedbacks        
+        headers:
+          deviceId:
+            description: This is the device id
+            required: true
+            example: 355357055544162
+          eventId:
+            description: This is the event id
+            required: true
+            example: 2
+        body:
+          application/json:
+            schema: <<resourcePathName|!singularize>>
+            example: | 
+              <<exampleCollection>>
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  { "message" : "The <<resourcePathName|!singularize>> has been saved" }
+          500:
+            body:
+              application/json:
+                example: |
+                  { "message" : "Error occured processing <<resourcePathName|!singularize>>" }
+/event:
+  type:
+    collection-item:
+      exampleItem: !include C:\\Projects\\CxP\\API\\cxp-event\\Contracts\\includes\\cxp-event.sample
+  get:
+   description: Get event configuration.
+   responses:
+    200:
+      body:
+        example: !include C:\\Projects\\CxP\\API\\cxp-event\\Contracts\\includes\\cxp-event.sample
+/feedback:
+  type:
+    collection:
+      exampleCollection: !include C:\\Projects\\CxP\\API\\cxp-event\\Contracts\\includes\\cxp-event-feedback.sample
+  post:
+    description: Post a feedback
+    body:
+      example:  !include C:\\Projects\\CxP\\API\\cxp-event\\Contracts\\includes\\cxp-event-feedback.sample

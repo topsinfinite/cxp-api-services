@@ -1,0 +1,712 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CustomerFeedbackGenericDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DeviceTbl">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DeviceID" Type="varchar" MaxLength="100" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="UserAssigned" Type="int" />
+          <Property Name="DateAdded" Type="datetime" />
+          <Property Name="isActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar(max)" />
+          <Property Name="Note" Type="varchar(max)" />
+          <Property Name="isActive" Type="bit" />
+          <Property Name="OrganisationID" Type="int" />
+          <Property Name="DateAdded" Type="datetime" />
+        </EntityType>
+        <EntityType Name="EventDevice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventID" Type="int" />
+          <Property Name="DeviceID" Type="int" />
+        </EntityType>
+        <EntityType Name="EventFeedback">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventID" Type="int" />
+          <Property Name="EventMetricID" Type="int" />
+          <Property Name="MetricElementtID" Type="int" />
+          <Property Name="Feedbackval" Type="int" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="DateAdded" Type="datetime" />
+        </EntityType>
+        <EntityType Name="EventMetric">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventID" Type="int" />
+          <Property Name="Label" Type="varchar" MaxLength="100" />
+          <Property Name="Icon" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CustomerFeedbackGenericDB.dbo.EventSmiley' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="EventSmiley">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Label" Type="varchar" MaxLength="250" />
+          <Property Name="Type" Type="varchar" MaxLength="250" />
+          <Property Name="ImageName" Type="varchar" MaxLength="250" />
+          <Property Name="EventId" Type="int" />
+        </EntityType>
+        <EntityType Name="HomeSetting">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EventID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar(max)" />
+          <Property Name="SmileyImage" Type="image" />
+          <Property Name="SmileyType" Type="varchar" MaxLength="50" />
+          <Property Name="Label" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="IconGallery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="400" />
+          <Property Name="Type" Type="int" />
+          <Property Name="isActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="MetricElement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventMetricID" Type="int" />
+          <Property Name="EventID" Type="int" />
+          <Property Name="Title" Type="varchar" MaxLength="100" />
+          <Property Name="Icon" Type="varchar" MaxLength="100" />
+          <Property Name="Note" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="SmileyAction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="300" />
+          <Property Name="SmileyImage" Type="varchar" MaxLength="400" />
+          <Property Name="SmileyType" Type="int" />
+          <Property Name="OrganisationId" Type="int" />
+          <Property Name="isActive" Type="bit" />
+          <Property Name="AddedBy" Type="varchar" MaxLength="200" />
+          <Property Name="DatedAdded" Type="datetime" />
+          <Property Name="ModifiedBy" Type="varchar" MaxLength="200" />
+          <Property Name="DateModified" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_EventDevice_DeviceTbl">
+          <End Role="DeviceTbl" Type="Self.DeviceTbl" Multiplicity="0..1" />
+          <End Role="EventDevice" Type="Self.EventDevice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeviceTbl">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventDevice">
+              <PropertyRef Name="DeviceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventDevice_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
+          <End Role="EventDevice" Type="Self.EventDevice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventDevice">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventFeedback_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
+          <End Role="EventFeedback" Type="Self.EventFeedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventFeedback">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventFeedback_EventFeedback">
+          <End Role="EventMetric" Type="Self.EventMetric" Multiplicity="0..1" />
+          <End Role="EventFeedback" Type="Self.EventFeedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventMetric">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventFeedback">
+              <PropertyRef Name="EventMetricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventFeedback_MetricElement">
+          <End Role="MetricElement" Type="Self.MetricElement" Multiplicity="0..1" />
+          <End Role="EventFeedback" Type="Self.EventFeedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MetricElement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventFeedback">
+              <PropertyRef Name="MetricElementtID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventMetric_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
+          <End Role="EventMetric" Type="Self.EventMetric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventMetric">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HomeSetting_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="HomeSetting" Type="Self.HomeSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HomeSetting">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MetricElement_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
+          <End Role="MetricElement" Type="Self.MetricElement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MetricElement">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MetricElement_EventMetric">
+          <End Role="EventMetric" Type="Self.EventMetric" Multiplicity="0..1" />
+          <End Role="MetricElement" Type="Self.MetricElement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventMetric">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MetricElement">
+              <PropertyRef Name="EventMetricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CustomerFeedbackGenericDBModelStoreContainer">
+          <EntitySet Name="DeviceTbl" EntityType="Self.DeviceTbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EventDevice" EntityType="Self.EventDevice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EventFeedback" EntityType="Self.EventFeedback" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EventMetric" EntityType="Self.EventMetric" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HomeSetting" EntityType="Self.HomeSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IconGallery" EntityType="Self.IconGallery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MetricElement" EntityType="Self.MetricElement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SmileyAction" EntityType="Self.SmileyAction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EventSmiley" EntityType="Self.EventSmiley" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [EventSmiley].[ID] AS [ID], 
+    [EventSmiley].[Label] AS [Label], 
+    [EventSmiley].[Type] AS [Type], 
+    [EventSmiley].[ImageName] AS [ImageName], 
+    [EventSmiley].[EventId] AS [EventId]
+    FROM [dbo].[EventSmiley] AS [EventSmiley]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_EventDevice_DeviceTbl" Association="Self.FK_EventDevice_DeviceTbl">
+            <End Role="DeviceTbl" EntitySet="DeviceTbl" />
+            <End Role="EventDevice" EntitySet="EventDevice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventDevice_Event" Association="Self.FK_EventDevice_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="EventDevice" EntitySet="EventDevice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventFeedback_Event" Association="Self.FK_EventFeedback_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="EventFeedback" EntitySet="EventFeedback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventFeedback_EventFeedback" Association="Self.FK_EventFeedback_EventFeedback">
+            <End Role="EventMetric" EntitySet="EventMetric" />
+            <End Role="EventFeedback" EntitySet="EventFeedback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventFeedback_MetricElement" Association="Self.FK_EventFeedback_MetricElement">
+            <End Role="MetricElement" EntitySet="MetricElement" />
+            <End Role="EventFeedback" EntitySet="EventFeedback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventMetric_Event" Association="Self.FK_EventMetric_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="EventMetric" EntitySet="EventMetric" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HomeSetting_Event" Association="Self.FK_HomeSetting_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="HomeSetting" EntitySet="HomeSetting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MetricElement_Event" Association="Self.FK_MetricElement_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="MetricElement" EntitySet="MetricElement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MetricElement_EventMetric" Association="Self.FK_MetricElement_EventMetric">
+            <End Role="EventMetric" EntitySet="EventMetric" />
+            <End Role="MetricElement" EntitySet="MetricElement" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CustomerFeedbackGenericDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DeviceTbl">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeviceID" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="UserAssigned" Type="Int32" />
+          <Property Name="DateAdded" Type="DateTime" Precision="3" />
+          <Property Name="isActive" Type="Boolean" />
+          <NavigationProperty Name="EventDevices" Relationship="Self.FK_EventDevice_DeviceTbl" FromRole="DeviceTbl" ToRole="EventDevice" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="isActive" Type="Boolean" />
+          <Property Name="OrganisationID" Type="Int32" />
+          <Property Name="DateAdded" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="EventDevices" Relationship="Self.FK_EventDevice_Event" FromRole="Event" ToRole="EventDevice" />
+          <NavigationProperty Name="EventFeedbacks" Relationship="Self.FK_EventFeedback_Event" FromRole="Event" ToRole="EventFeedback" />
+          <NavigationProperty Name="EventMetrics" Relationship="Self.FK_EventMetric_Event" FromRole="Event" ToRole="EventMetric" />
+          <NavigationProperty Name="HomeSettings" Relationship="Self.FK_HomeSetting_Event" FromRole="Event" ToRole="HomeSetting" />
+          <NavigationProperty Name="MetricElements" Relationship="CustomerFeedbackGenericDBModel.FK_MetricElement_Event" FromRole="Event" ToRole="MetricElement" />
+        </EntityType>
+        <EntityType Name="EventDevice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventID" Type="Int32" />
+          <Property Name="DeviceID" Type="Int32" />
+          <NavigationProperty Name="DeviceTbl" Relationship="Self.FK_EventDevice_DeviceTbl" FromRole="EventDevice" ToRole="DeviceTbl" />
+          <NavigationProperty Name="Event" Relationship="Self.FK_EventDevice_Event" FromRole="EventDevice" ToRole="Event" />
+        </EntityType>
+        <EntityType Name="EventFeedback">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventID" Type="Int32" />
+          <Property Name="EventMetricID" Type="Int32" />
+          <Property Name="MetricElementtID" Type="Int32" />
+          <Property Name="Feedbackval" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="DateAdded" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Event" Relationship="Self.FK_EventFeedback_Event" FromRole="EventFeedback" ToRole="Event" />
+          <NavigationProperty Name="EventMetric" Relationship="Self.FK_EventFeedback_EventFeedback" FromRole="EventFeedback" ToRole="EventMetric" />
+          <NavigationProperty Name="MetricElement" Relationship="CustomerFeedbackGenericDBModel.FK_EventFeedback_MetricElement" FromRole="EventFeedback" ToRole="MetricElement" />
+        </EntityType>
+        <EntityType Name="EventMetric">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventID" Type="Int32" />
+          <Property Name="Label" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Icon" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Event" Relationship="Self.FK_EventMetric_Event" FromRole="EventMetric" ToRole="Event" />
+          <NavigationProperty Name="EventFeedbacks" Relationship="Self.FK_EventFeedback_EventFeedback" FromRole="EventMetric" ToRole="EventFeedback" />
+          <NavigationProperty Name="MetricElements" Relationship="CustomerFeedbackGenericDBModel.FK_MetricElement_EventMetric" FromRole="EventMetric" ToRole="MetricElement" />
+        </EntityType>
+        <EntityType Name="HomeSetting">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EventID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SmileyImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="SmileyType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Label" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Event" Relationship="Self.FK_HomeSetting_Event" FromRole="HomeSetting" ToRole="Event" />
+        </EntityType>
+        <EntityType Name="IconGallery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="isActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SmileyAction">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="SmileyImage" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="SmileyType" Type="Int32" />
+          <Property Name="OrganisationId" Type="Int32" />
+          <Property Name="isActive" Type="Boolean" />
+          <Property Name="AddedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="DatedAdded" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_EventDevice_DeviceTbl">
+          <End Role="DeviceTbl" Type="Self.DeviceTbl" Multiplicity="0..1" />
+          <End Role="EventDevice" Type="Self.EventDevice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeviceTbl">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventDevice">
+              <PropertyRef Name="DeviceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventDevice_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
+          <End Role="EventDevice" Type="Self.EventDevice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventDevice">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventFeedback_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
+          <End Role="EventFeedback" Type="Self.EventFeedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventFeedback">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventMetric_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
+          <End Role="EventMetric" Type="Self.EventMetric" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventMetric">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HomeSetting_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="HomeSetting" Type="Self.HomeSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="HomeSetting">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventFeedback_EventFeedback">
+          <End Role="EventMetric" Type="Self.EventMetric" Multiplicity="0..1" />
+          <End Role="EventFeedback" Type="Self.EventFeedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventMetric">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventFeedback">
+              <PropertyRef Name="EventMetricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CustomerFeedbackDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DeviceTbls" EntityType="Self.DeviceTbl" />
+          <EntitySet Name="Events" EntityType="Self.Event" />
+          <EntitySet Name="EventDevices" EntityType="Self.EventDevice" />
+          <EntitySet Name="EventFeedbacks" EntityType="Self.EventFeedback" />
+          <EntitySet Name="EventMetrics" EntityType="Self.EventMetric" />
+          <EntitySet Name="HomeSettings" EntityType="Self.HomeSetting" />
+          <EntitySet Name="IconGalleries" EntityType="Self.IconGallery" />
+          <EntitySet Name="SmileyActions" EntityType="Self.SmileyAction" />
+          <AssociationSet Name="FK_EventDevice_DeviceTbl" Association="Self.FK_EventDevice_DeviceTbl">
+            <End Role="DeviceTbl" EntitySet="DeviceTbls" />
+            <End Role="EventDevice" EntitySet="EventDevices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventDevice_Event" Association="Self.FK_EventDevice_Event">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="EventDevice" EntitySet="EventDevices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventFeedback_Event" Association="Self.FK_EventFeedback_Event">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="EventFeedback" EntitySet="EventFeedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventMetric_Event" Association="Self.FK_EventMetric_Event">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="EventMetric" EntitySet="EventMetrics" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HomeSetting_Event" Association="Self.FK_HomeSetting_Event">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="HomeSetting" EntitySet="HomeSettings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventFeedback_EventFeedback" Association="Self.FK_EventFeedback_EventFeedback">
+            <End Role="EventMetric" EntitySet="EventMetrics" />
+            <End Role="EventFeedback" EntitySet="EventFeedbacks" />
+          </AssociationSet>
+          <EntitySet Name="EventSmileys" EntityType="CustomerFeedbackGenericDBModel.EventSmiley" />
+          <EntitySet Name="MetricElements" EntityType="CustomerFeedbackGenericDBModel.MetricElement" />
+          <AssociationSet Name="FK_MetricElement_Event" Association="CustomerFeedbackGenericDBModel.FK_MetricElement_Event">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="MetricElement" EntitySet="MetricElements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EventFeedback_MetricElement" Association="CustomerFeedbackGenericDBModel.FK_EventFeedback_MetricElement">
+            <End Role="MetricElement" EntitySet="MetricElements" />
+            <End Role="EventFeedback" EntitySet="EventFeedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MetricElement_EventMetric" Association="CustomerFeedbackGenericDBModel.FK_MetricElement_EventMetric">
+            <End Role="EventMetric" EntitySet="EventMetrics" />
+            <End Role="MetricElement" EntitySet="MetricElements" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="EventSmiley">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Label" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ImageName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="EventId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="MetricElement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventMetricID" Type="Int32" />
+          <Property Name="EventID" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Icon" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Event" Relationship="CustomerFeedbackGenericDBModel.FK_MetricElement_Event" FromRole="MetricElement" ToRole="Event" />
+          <NavigationProperty Name="EventFeedbacks" Relationship="CustomerFeedbackGenericDBModel.FK_EventFeedback_MetricElement" FromRole="MetricElement" ToRole="EventFeedback" />
+          <NavigationProperty Name="EventMetric" Relationship="CustomerFeedbackGenericDBModel.FK_MetricElement_EventMetric" FromRole="MetricElement" ToRole="EventMetric" />
+        </EntityType>
+        <Association Name="FK_MetricElement_Event">
+          <End Type="CustomerFeedbackGenericDBModel.Event" Role="Event" Multiplicity="0..1" />
+          <End Type="CustomerFeedbackGenericDBModel.MetricElement" Role="MetricElement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MetricElement">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EventFeedback_MetricElement">
+          <End Type="CustomerFeedbackGenericDBModel.MetricElement" Role="MetricElement" Multiplicity="0..1" />
+          <End Type="CustomerFeedbackGenericDBModel.EventFeedback" Role="EventFeedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MetricElement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="EventFeedback">
+              <PropertyRef Name="MetricElementtID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MetricElement_EventMetric">
+          <End Type="CustomerFeedbackGenericDBModel.EventMetric" Role="EventMetric" Multiplicity="0..1" />
+          <End Type="CustomerFeedbackGenericDBModel.MetricElement" Role="MetricElement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventMetric">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MetricElement">
+              <PropertyRef Name="EventMetricID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CustomerFeedbackGenericDBModelStoreContainer" CdmEntityContainer="CustomerFeedbackDBEntities">
+          <EntitySetMapping Name="DeviceTbls">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.DeviceTbl">
+              <MappingFragment StoreEntitySet="DeviceTbl">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="UserAssigned" ColumnName="UserAssigned" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.Event">
+              <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="OrganisationID" ColumnName="OrganisationID" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventDevices">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.EventDevice">
+              <MappingFragment StoreEntitySet="EventDevice">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventFeedbacks">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.EventFeedback">
+              <MappingFragment StoreEntitySet="EventFeedback">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+                <ScalarProperty Name="EventMetricID" ColumnName="EventMetricID" />
+                <ScalarProperty Name="MetricElementtID" ColumnName="MetricElementtID" />
+                <ScalarProperty Name="Feedbackval" ColumnName="Feedbackval" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventMetrics">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.EventMetric">
+              <MappingFragment StoreEntitySet="EventMetric">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HomeSettings">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.HomeSetting">
+              <MappingFragment StoreEntitySet="HomeSetting">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="SmileyImage" ColumnName="SmileyImage" />
+                <ScalarProperty Name="SmileyType" ColumnName="SmileyType" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IconGalleries">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.IconGallery">
+              <MappingFragment StoreEntitySet="IconGallery">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SmileyActions">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.SmileyAction">
+              <MappingFragment StoreEntitySet="SmileyAction">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SmileyImage" ColumnName="SmileyImage" />
+                <ScalarProperty Name="SmileyType" ColumnName="SmileyType" />
+                <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="AddedBy" ColumnName="AddedBy" />
+                <ScalarProperty Name="DatedAdded" ColumnName="DatedAdded" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventSmileys">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.EventSmiley">
+              <MappingFragment StoreEntitySet="EventSmiley">
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Label" ColumnName="Label" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MetricElements">
+            <EntityTypeMapping TypeName="CustomerFeedbackGenericDBModel.MetricElement">
+              <MappingFragment StoreEntitySet="MetricElement">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+                <ScalarProperty Name="EventMetricID" ColumnName="EventMetricID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
